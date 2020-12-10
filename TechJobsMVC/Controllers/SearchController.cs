@@ -18,5 +18,13 @@ namespace TechJobsMVC.Controllers
         }
 
         // TODO #3: Create an action method to process a search request and render the updated search view. 
+        [HttpPost]
+        public IActionResult Results(string searchType, string searchTerm)
+        {
+            TempData["searchType"] = searchType; //temporarily holding searchtype/column value until it is used by List Controller
+            TempData["searchTerm"] = searchTerm;//temporarily holding searchTerm value until it is used by List Controller
+
+            return Redirect("/list/jobs"); //passing parameters to List Controller
+        }
     }
 }

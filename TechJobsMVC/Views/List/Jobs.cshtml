@@ -1,10 +1,46 @@
-﻿<div class="container body-content">
-
+﻿<div class="container body-content text-center" >
     <h1>@ViewBag.title</h1>
+</div>
 
-    @{
-        //TODO #1: Use a loop to display job results in a table.
+<table class="table table-striped col-md-6 mx-auto">
+
+
+    @foreach (var job in ViewBag.jobs)
+    {
+        <tr>
+            <th scope="row">ID</th>
+            <td>@job.Id</td>
+        </tr>
+
+        <tr>
+            <th scope="row">Name</th>
+            <td>@job.Name</td>
+        </tr>
+
+        <tr>
+            <th scope="row">Employer</th>
+            <td>@job.Employer</td>
+        </tr>
+
+        <tr>
+            <th scope="row">Location</th>
+            <td>@job.Location</td>
+        </tr>
+
+        <tr>
+            <th scope="row">Position Type</th>
+            <td>@job.PositionType</td>
+        </tr>
+
+        <tr>
+            <th scope="row">Skill</th>
+            <td>@job.CoreCompetency</td>
+        </tr>
+
+        <tr>
+            <th></th>
+            <td></td>
+        </tr>
     }
 
-
-</div>
+</table>

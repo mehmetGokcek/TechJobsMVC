@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,7 @@ namespace TechJobsMVC.Controllers
             {"positionType", "Position Type"},
             {"coreCompetency", "Skill"}
         };
+
         internal static Dictionary<string, List<JobField>> TableChoices = new Dictionary<string, List<JobField>>()
         {
             {"employer", JobData.GetAllEmployers()},
@@ -44,15 +46,41 @@ namespace TechJobsMVC.Controllers
         public IActionResult Jobs(string column, string value)
         {
             List<Job> jobs;
+
+            if (TempData["searchType"] != null)
+            {
+                column = (string)TempData["searchType"]; //accepting column parameter from Search Controller
+                value = (string)TempData["searchTerm"]; // accepting value paremeter from Search Controller
+            }
+
+
+
             if (column.ToLower().Equals("all"))
             {
-                jobs = JobData.FindAll();
-                ViewBag.title = "All Jobs";
+                if (String.IsNullOrWhiteSpace(value) || value == "all") //check to see if there is any search term entered in the search
+                {
+                    jobs = JobData.FindAll(); // if there is no search term entered by the user show all jobs
+                    ViewBag.title = "ALL JOBS";
+                }
+                else {
+                    jobs = JobData.FindByValue(value); // when a search term is entered by the user, search through everything.
+                    ViewBag.title = "JOBS WITH " + ColumnChoices[column].ToUpper() + ": " + value.ToUpper();
+
+                }
             }
+
+            else if (String.IsNullOrWhiteSpace(value)) 
+            {
+                jobs = null;
+                return Redirect("/List");
+
+            }
+
             else
             {
                 jobs = JobData.FindByColumnAndValue(column, value);
-                ViewBag.title = "Jobs with " + ColumnChoices[column] + ": " + value;
+
+                ViewBag.title = "JOBS WITH " + ColumnChoices[column].ToUpper() + ": " + value.ToUpper();
             }
             ViewBag.jobs = jobs;
 
